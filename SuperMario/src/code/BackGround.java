@@ -37,7 +37,9 @@ public class BackGround {
         }else {
             bgImage = StaticValue.bg;
         }
+        if (sort == 0){
 
+        }
         //判断是否是第一关
         if (sort == 1) {
             //绘制第一关的地面,上地面type=1,下地面type=2
@@ -59,7 +61,7 @@ public class BackGround {
 
 
             //绘制砖块B-F
-            for (int i = 300;i <= 570;i += 30) {
+            for (int i = 240;i <= 570;i += 30) {
                 if (i == 360 || i == 390 || i == 480 || i == 510 || i == 540) {
                     obstacleList.add(new Obstacle(i,300,7,this));
                 } else {
@@ -70,7 +72,7 @@ public class BackGround {
 
             //绘制砖块G
             for (int i = 420;i <= 450;i += 30) {
-                obstacleList.add(new Obstacle(i,240,7,this));
+                obstacleList.add(new Obstacle(i,200,7,this));
             }
 
 
@@ -84,11 +86,12 @@ public class BackGround {
                     obstacleList.add(new Obstacle(645,i,6,this));
                 }
             }
-
             //绘制第一关的蘑菇敌人
-            enemyList.add(new Enemy(580,385,true,1,this));
-            //绘制第一关的食人花敌人
+            //enemyList.add(new Enemy(580,385,true,1,this));
+            //绘制第一关的食人花敌人 y 328-428
             enemyList.add(new Enemy(635,420,true,2,328,428,this));
+            //绘制第一关的乌龟敌人 x 300-570    385
+            enemyList.add(new Enemy(570,385,true,3,200,300,this,1));
         }
 
         //判断是否是第二关
@@ -163,6 +166,7 @@ public class BackGround {
             enemyList.add(new Enemy(200,385,true,1,this));
             //绘制第二关的第二个蘑菇敌人
             enemyList.add(new Enemy(500,385,true,1,this));
+
         }
 
         //判断是否是第三关

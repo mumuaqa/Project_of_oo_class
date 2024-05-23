@@ -9,6 +9,11 @@ import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import static com.sxt.Mario.life;
+import static com.sxt.Mario.wudi;
 
 public class MyFrame extends JFrame implements KeyListener,Runnable {
     //用于存储所有的背景
@@ -36,7 +41,7 @@ public class MyFrame extends JFrame implements KeyListener,Runnable {
         //向窗口对象添加键盘监听器
         this.addKeyListener(this);
         //设置窗口名称
-        this.setTitle("Mario");
+        this.setTitle("SuperMario");
         //初始化图片
         StaticValue.init();
         //初始化马里奥
@@ -59,6 +64,7 @@ public class MyFrame extends JFrame implements KeyListener,Runnable {
             e.printStackTrace();
         }
     }
+    private static PrintWriter stdOut = new PrintWriter(System.out, true);
 
     @Override
     public void paint(Graphics g) {
@@ -66,12 +72,23 @@ public class MyFrame extends JFrame implements KeyListener,Runnable {
             offScreenImage = createImage(800,600);
         }
 
-        Graphics graphics = offScreenImage.getGraphics();
-        graphics.fillRect(0,0,800,600);
 
+        //StringWriter stringWriter = new StringWriter();
+        ICarnegieInfo companyInfo = ICarnegieInfo.getSingletonInstance();
+        //PrintWriter printWriter = new PrintWriter(stringWriter);
+        // 使用单例实例来获取和打印信息
+        Graphics graphics = offScreenImage.getGraphics();
+        //graphics.fillRect(0,0,800,600);
+        //graphics.drawString("版权信息 " + "Name: " + companyInfo.getName()+"/n"+"ID: " + companyInfo.getID(),100,100);
         //绘制背景
         graphics.drawImage(nowBg.getBgImage(),0,0,this);
-
+        //h显示生命
+        int lifex=life;
+        if (life==0)
+            lifex=1;
+        if (life==2)
+            lifex=life;
+        graphics.drawString("当前生命："+lifex,600,50);
         //绘制敌人
         for (Enemy e : nowBg.getEnemyList()) {
             graphics.drawImage(e.getShow(),e.getX(),e.getY(),this);
@@ -96,6 +113,9 @@ public class MyFrame extends JFrame implements KeyListener,Runnable {
         graphics.setColor(Color.BLACK);
         graphics.setFont(new Font("黑体",Font.BOLD,25));
         graphics.drawString("当前的分数为: " + mario.getScore(),300,100);
+        //添加版权信息
+        graphics.setFont(new Font("黑体",Font.BOLD,10));
+        graphics.drawString("版权信息 " + "Name: " + companyInfo.getName()+"\n"+"ID: " + companyInfo.getID(),50,50);
         graphics.setColor(c);
 
         //将图像绘制到窗口中
@@ -172,5 +192,36 @@ public class MyFrame extends JFrame implements KeyListener,Runnable {
             }
         }
     }
+
+    public interface ICarnegieInfo {
+        String getName();
+
+        String getID();
+        static ICarnegieInfo getSingletonInstance() {
+            return CarnegieInfoSingleton.INSTANCE;
+        }
+    }
+
+    enum CarnegieInfoSingleton implements ICarnegieInfo {
+        INSTANCE;
+
+        private String name = "杨皓元，杨瑾鸿";
+        private String ID = "123456";
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+
+
+        @Override
+        public String getID() {
+            return ID;
+        }
+    }
+
+
+
 
 }

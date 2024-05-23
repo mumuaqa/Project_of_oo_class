@@ -1,7 +1,8 @@
 package com.sxt;
+import java.time.Instant;
 
 import java.awt.image.BufferedImage;
-
+import java.time.Duration;
 public class Mario implements Runnable{
     //用于表示横纵坐标
     private int x;
@@ -28,7 +29,7 @@ public class Mario implements Runnable{
     private boolean isDeath = false;
     //表示分数
     private int score = 0;
-
+    public static int life = 1;
     public Mario() {
     }
 
@@ -40,10 +41,27 @@ public class Mario implements Runnable{
         thread = new Thread(this);
         thread.start();
     }
+    public static int wudi=0 ;
+    public void setwuditime(){
+        wudi =15;
+    }
+    public  long startTime;
 
     //马里奥的死亡方法
     public void death() {
-        isDeath = true;
+
+        if(life>1){
+            setwuditime();
+        }
+        if (life>=1)
+            life--;
+        if(wudi>0)
+            wudi--;
+        if (wudi ==0&&life==0) {
+
+            isDeath = true;
+        }
+
     }
 
     //马里奥向左移动
@@ -202,27 +220,38 @@ public class Mario implements Runnable{
                     }
 
                 }
+            }
 
                 //判断马里奥是否碰到敌人死亡或者踩死蘑菇敌人
-                for (int i = 0;i < backGround.getEnemyList().size();i++) {
+                for (int i = 0; i < backGround.getEnemyList().size(); i++) {
                     Enemy e = backGround.getEnemyList().get(i);
 
-                    if (e.getY() == this.y + 20 && (e.getX() - 25 <= this.x && e.getX() + 35 >= this.x)) {
-                        if (e.getType() == 1) {
-                            e.death();
-                            score += 2;
-                            upTime = 3;
-                            ySpeed = -10;
-                        }else if (e.getType() == 2) {
+
+
+
+                        // 判断马里奥是否碰到敌人
+                        if (e.getY() == this.y + 20 && (e.getX() - 25 <= this.x && e.getX() + 35 >= this.x)) {
+                            // 马里奥死亡
+                            startTime= System.currentTimeMillis();
+                            if (e.getType() == 2) {
+                                death();
+                            } else if (e.getType() == 1) {
+                                e.death();
+                                score +=2;
+                                upTime = 3;
+                                ySpeed = -10;
+                            } else if (e.getType() == 3) {
+                                e.death(1);
+                                score += 5;
+                                life++;
+                                break;
+                            }
+                        }
+                        if ((e.getX() + 35 > this.x && e.getX() - 25 < this.x) && (e.getY() + 35 > this.y && e.getY() - 20 < this.y)) {
                             //马里奥死亡
                             death();
                         }
-                    }
 
-                    if ((e.getX() + 35 > this.x && e.getX() - 25 < this.x) && (e.getY() + 35 > this.y && e.getY() - 20 < this.y)) {
-                        //马里奥死亡
-                        death();
-                    }
                 }
 
                 //进行马里奥跳跃的操作
@@ -248,7 +277,7 @@ public class Mario implements Runnable{
                     }
                     y += ySpeed;
                 }
-            }
+
 
             if ((canLeft && xSpeed < 0) || (canRight && xSpeed > 0)) {
                 x += xSpeed;
@@ -334,3 +363,4 @@ public class Mario implements Runnable{
         return score;
     }
 }
+

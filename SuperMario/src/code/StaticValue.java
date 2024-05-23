@@ -35,6 +35,8 @@ public class StaticValue {
     public static List<BufferedImage> mogu = new ArrayList<>();
     //食人花敌人
     public static List<BufferedImage> flower = new ArrayList<>();
+    //乌龟敌人
+    public static List<BufferedImage> wugui = new ArrayList<>();
     //路径的前缀,方便后续调用
     public static String path = System.getProperty("user.dir") + "/src/images/";
 
@@ -122,5 +124,16 @@ public class StaticValue {
                 e.printStackTrace();
             }
         }
+        //加载乌龟d敌人
+
+        for (int i = 1;i <= 3;i++) {
+            try {
+                wugui.add(ImageIO.read(new File(path + "wugui"+i+".png")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 }
